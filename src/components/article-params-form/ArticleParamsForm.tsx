@@ -13,28 +13,27 @@ import {
 	fontColors,
 	contentWidthArr,
 	defaultArticleState,
+	ArticleStateType,
 } from '../../constants/articleProps';
 import { RadioGroup } from 'src/ui/radio-group';
 import { Separator } from 'src/ui/separator';
 
-export type ArticleState = typeof defaultArticleState;
-
 interface ArticleStateParams {
-	setArticleStyles: (state: ArticleState) => void;
+	setArticleStyles: (state: ArticleStateType) => void;
 }
 
 export const ArticleParamsForm = ({ setArticleStyles }: ArticleStateParams) => {
-	const [isOpen, setIsOpen] = useState<boolean>(false);
+	const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
 	const [newArticleStyles, setNewArticleStyles] =
-		useState<ArticleState>(defaultArticleState);
+		useState<ArticleStateType>(defaultArticleState);
 	const formRef = useRef<HTMLElement | null>(null);
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			const target = event.target as Node;
 
-			if (isOpen && !formRef.current?.contains(target)) {
-				setIsOpen(false);
+			if (isFormOpen && !formRef.current?.contains(target)) {
+				setIsFormOpen(false);
 			}
 		};
 
@@ -43,7 +42,7 @@ export const ArticleParamsForm = ({ setArticleStyles }: ArticleStateParams) => {
 		return () => {
 			document.removeEventListener('mousedown', handleClickOutside);
 		};
-	}, [isOpen, formRef]);
+	}, [isFormOpen, formRef]);
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -55,9 +54,9 @@ export const ArticleParamsForm = ({ setArticleStyles }: ArticleStateParams) => {
 		setArticleStyles(defaultArticleState);
 	};
 
-	const updateField = <T extends keyof ArticleState>(
+	const updateField = <T extends keyof ArticleStateType>(
 		key: T,
-		value: ArticleState[T]
+		value: ArticleStateType[T]
 	) => {
 		setNewArticleStyles((prev) => ({ ...prev, [key]: value }));
 	};
@@ -65,13 +64,15 @@ export const ArticleParamsForm = ({ setArticleStyles }: ArticleStateParams) => {
 	return (
 		<>
 			<ArrowButton
-				isOpen={isOpen}
+				isOpen={isFormOpen}
 				onClick={() => {
-					setIsOpen(!isOpen);
+					setIsFormOpen(!isFormOpen);
 				}}
 			/>
 			<aside
-				className={clsx(styles.container, { [styles.container_open]: isOpen })}
+				className={clsx(styles.container, {
+					[styles.container_open]: isFormOpen,
+				})}
 				ref={formRef}>
 				<form
 					className={styles.form}

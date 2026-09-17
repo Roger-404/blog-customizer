@@ -2,17 +2,17 @@ import { CSSProperties, useState } from 'react';
 import clsx from 'clsx';
 
 import { Article } from '../article/Article';
+import { ArticleParamsForm } from '../article-params-form/ArticleParamsForm';
 import {
-	ArticleParamsForm,
-	ArticleState,
-} from '../article-params-form/ArticleParamsForm';
-import { defaultArticleState } from './../../constants/articleProps';
+	defaultArticleState,
+	ArticleStateType,
+} from './../../constants/articleProps';
 
 import styles from './app.module.scss';
 
 export const App = () => {
 	const [articleStyles, setArticleStyles] =
-		useState<ArticleState>(defaultArticleState);
+		useState<ArticleStateType>(defaultArticleState);
 
 	return (
 		<main
